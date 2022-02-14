@@ -1,0 +1,14 @@
+THE PROCESS TO CREATE SCORES FROM VCF
+
+1 - Copy or soft link your vcf file into the raw_vcf directory
+2 - Run the prep_vcf.sh file from within the prep_vcf directory
+    This script will automatically determine which novel vcfs require prepping
+3 - Download the desired variant sets from the PGS Catalog to raw_catalog_sets
+4 - Run refiner_ss.R or pos_refiner_ss.R to create a workable version of the PGS
+    This process can be tricky and fail for various reasons
+5 - Run in_control.sh from within the get_all_snps directory
+6 - Specify the scores you want to score in the do_score/ss_names and do_score/pgs_names files
+7 - Run uk_control.sh within the do_score directory
+8 - Run uk_simple_assemble.R within the do_score directory
+9 - Run finish.R within the do_score directory
+10 - In steps 8 and 9 make sure the file prefixes line up

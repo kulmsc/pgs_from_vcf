@@ -1,5 +1,9 @@
 #filename=$1
-ls ../raw_vcf/ | while read filename;do
+ls ../raw_vcf/ | cut -f1 -d'.' > temp1
+ls | fgrep vcf.gz | cut -f1 -d'.' > temp2
+cat temp1 | fgrep -w -v -f temp2 > todo
+
+ls ../raw_vcf/ | fgrep -w -f todo | while read filename;do
 
   prefix=`echo $filename | cut -f1 -d'.'`
   if [ ! -e ${prefix}.lifted.vcf.gz ];then
@@ -27,3 +31,5 @@ ls ../raw_vcf/ | while read filename;do
     ./get_bad_rsids.sh ${prefix}
   fi
 done
+
+rm temp1 temp2 todo

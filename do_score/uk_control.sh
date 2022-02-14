@@ -1,8 +1,8 @@
 rm comp_sizes bad_rsid
-prefix=full_fifty_run #of the small_score output
+prefix=jc_full_run #of the small_score output
 
 #watch out for the grep !!!
-for chr in {1..22};do
+for chr in {1..12};do
 #for chr in 12;do
 
   #--- get rsids in mod_sets
@@ -10,6 +10,9 @@ for chr in {1..22};do
   #ls ../mod_sets/ | fgrep .${chr}. | while read line;do
   cat ss_names | while read line;do
     cat ../mod_sets/${line}.${chr}.ss | tail -n+2 | cut -f3 >> all_rsids
+  done
+  cat pgs_names | while read line;do
+    cat ../pgs_sets/${line}.${chr}.ss | tail -n+2 | cut -f2 >> all_rsids
   done
 
   #--- get ukbb data
@@ -77,10 +80,10 @@ for chr in {1..22};do
 
   rm use.bed use.bim use.fam temp_files/use.bed temp_files/use.bim temp_files/use.fam
 
-  ./get_subset_rsids.sh $chr
+  #./get_subset_rsids.sh $chr
 
-  Rscript align_sumstats.R $chr
-  mv big_mod_set big_mod_set.${chr}
+  #Rscript align_sumstats.R $chr
+  #mv big_mod_set big_mod_set.${chr}
   #num_cols=`head -1 big_mod_set | cut -f3-300 | tr '\t' '\n' | wc -l`
   
   #plink2 --bfile use_done --score big_mod_set 1 2 header-read cols=+scoresums --score-col-nums 3-${num_cols} --out big_small_scores/res.${chr}
@@ -93,10 +96,18 @@ for chr in {1..22};do
       sleep 30
   done
 
+  cat pgs_names | while read ss;do
+      ./pgs_simple_score.sh $ss $prefix $chr $chr
+      rm full_small_score_files/*nosex
+      sleep 30
+  done
 
-  rm big_mod_set.${chr}
+
+
+  #rm big_mod_set.${chr}
   rm use_done*
-  rm exp_done*  
+  #rm exp_done*  
+  rm temp_files/*
 
 done
 

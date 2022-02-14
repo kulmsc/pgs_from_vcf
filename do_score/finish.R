@@ -1,5 +1,5 @@
 
-prefix_name <- "full_fifty_run"
+prefix_name <- "ms_new_run"
 
 scores <- readRDS(paste0("final_scores/", prefix_name, "_score.RDS"))
 
@@ -23,7 +23,8 @@ construct_eids <- construct_eids[-length(construct_eids)]
 scores <- scores[eids[,1] %in% construct_eids | grepl("new_", eids[,1]),,drop=F]
 eids <- eids[eids[,1] %in% construct_eids | grepl("new_", eids[,1]),,drop=F]
 
-for(author in colnames(scores)){
+#for(author in colnames(scores)){
+for(author in c("christophersen", "nikpay")){
 
   pheno <- read.table(paste0("~/athena/doc_score/analyze_score/construct_defs/pheno_defs/diag.", tolower(author), ".txt.gz"), stringsAsFactors=F)
   pheno <- pheno[,1:4]

@@ -1,6 +1,7 @@
 library(data.table)
 
-prefix_name <- "full_fifty_run"
+prefix_name <- "jc_full_run"
+new_name <- "jc_3_run"
 
 all_files <- list.files("small_score_files/", pattern = "profile")
 all_files <- grep(prefix_name, all_files, value = T)
@@ -44,8 +45,8 @@ for(i in 1:length(all_files)){
 rownames(all_percs) <- all_files
 
 
-write.table(scores, paste0("final_scores/", prefix_name, "_score.txt"), row.names = F, col.names = T, quote = F, sep = ' ')
-saveRDS(scores, paste0("final_scores/", prefix_name, "_score.RDS"))
+write.table(scores, paste0("final_scores/", new_name, "_score.txt"), row.names = F, col.names = T, quote = F, sep = ' ')
+saveRDS(scores, paste0("final_scores/", new_name, "_score.RDS"))
 
 
 score_percs <- matrix(NA, nrow = ncol(scores), ncol = sum(grepl("new_", sub_score$FID)))
@@ -56,5 +57,5 @@ for(i in 1:ncol(scores)){
   score_percs[i,] <- percentile(scores[grepl("new_", sub_score$FID),i])
 }
 
-saveRDS(list("total" = score_percs, "by_chromosome" = all_percs), paste0("final_scores/", prefix_name, "_percs.RDS"))
+saveRDS(list("total" = score_percs, "by_chromosome" = all_percs), paste0("final_scores/", new_name, "_percs.RDS"))
 

@@ -7,6 +7,11 @@ ls ../mod_sets/ | fgrep .${chr}. | while read line;do
   cat ../mod_sets/$line | tail -n+2 | cut -f3 >> all_rsids
   cat ../mod_sets/$line | tail -n+2 | cut -f3-5  >> all_ids
 done
+
+ls ../pgs_sets | fgrep .${chr}. | while read line;do
+  cat ../pgs_sets/$line | tail -n+2 | cut -f2 >> all_rsids
+done
+
 cat all_rsids | sort | uniq > temp; mv temp all_rsids
 cat all_ids | sort | uniq > temp; mv temp all_ids
 

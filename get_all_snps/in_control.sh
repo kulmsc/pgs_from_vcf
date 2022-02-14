@@ -1,4 +1,9 @@
 
+ls output_files/ | cut -f1 -d'.' | sort | uniq > temp1
+ls ../prep_vcf/ | fgrep vcf.gz | cut -f1 -d'.' | sort | uniq > temp2
+cat temp2 | fgrep -w -v -f temp1 > prefix_list
+rm temp1 temp2
+
 cat prefix_list | while read pre;do
   if [ ! -e ${pre}.ref.bed ];then
     for chrom in {1..22};do

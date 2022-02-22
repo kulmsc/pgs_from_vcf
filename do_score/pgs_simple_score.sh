@@ -6,10 +6,10 @@ i=$4
 
 echo $ss_name $prefix $chr $i
 
-#Just logistics around controlling parallelism
-#go_num=`head -1 temp_files/poss_go`
-#grep -v -w $go_num temp_files/poss_go > temp_files/temp_poss
-#mv temp_files/temp_poss temp_files/poss_go
+#get the length of the files
+chr_col=`zcat ../raw_catalog_sets/${ss_name}.txt.gz | head -20 | fgrep chr_name | tr '\t' '\n' | fgrep -n chr_name | cut -f1 -d':'`
+nsnps_raw=`zcat ../raw_catalog_sets/${ss_name}.txt.gz | fgrep -v '#' | fgrep -v "chr_name" | cut -f${chr_col} | fgrep -w $chr | wc -l`
+nsnps_refine=`cat ../pgs_sets/${ss_name}.${chr}.ss | tail -n+2 | wc -l`
 
 
 if [ ! -e full_small_score_files/score.${prefix}.${ss_name}.${chr}.profile.zst ];then
@@ -20,14 +20,11 @@ if [ ! -e full_small_score_files/score.${prefix}.${ss_name}.${chr}.profile.zst ]
 
   zstd --rm small_score_files/score.${prefix}.full.${ss_name}.${chr}.profile
 
-
-#    ls ../impute/output_files/GEN*bed | cut -f4 -d'/' | cut -f1 -d'.' | sort | uniq | while read newfix;do
-#    for subset in variable ref;do
-#      cat ../impute/output_files/${newfix}.${chr}.${subset}.bim | cut -f2 > exrsid.${newfix}.${subset}
-#      plink --memory 12000 --threads 12 --bfile use_done --extract exrsid.${newfix}.${subset} --keep-allele-order --score ../mod_sets/${ss_name}.${chr}.ss 3 4 7 sum --allow-extra-chr --out full_small_score_files/score.${newfix}.${subset}.${ss_name}.${chr}
-#      zstd --rm full_small_score_files/score.${newfix}.${subset}.${ss_name}.${chr}.profile
-#    done
-#    done
+  nsnps_scored=`cat small_score_files/score.${prefix}.full.${ss_name}.${chr}.log  | fgrep valid | cut -f2 -d' '`
+  
+  echo nsnps_raw $nsnps_raw > small_report_files/${prefix}.${ss_name}.${chr}.txt
+  echo nsnps_refine $nsnps_refine >> small_report_files/${prefix}.${ss_name}.${chr}.txt
+  echo nsnps_scored $nsnps_scored >> small_report_files/${prefix}.${ss_name}.${chr}.txt
 
 else
 
